@@ -1,0 +1,301 @@
+mysql> select *from student;
++------------+--------------+------+-----------+
+| student_id | name         | mark | course_id |
++------------+--------------+------+-----------+
+|          1 | saran        |   89 |         3 |
+|          2 | saranya      |   40 |         4 |
+|          3 | saranya devi |   90 |         4 |
+|          4 | sara         |   60 |         3 |
+|          5 | sarandev     |   30 |         5 |
++------------+--------------+------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> create table students (
+    -> id int primary key,
+    ->     name varchar(50)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> create table marks (
+    ->     mark_id int primary key,
+    ->     student_id int,
+    ->     subject varchar(50),
+    ->     mark int,
+    ->     foreign key (student_id) references student(id)
+    -> );
+ERROR 3734 (HY000): Failed to add the foreign key constraint. Missing column 'id' for constraint 'marks_ibfk_1' in the referenced table 'student'
+mysql> create table marks (
+    ->     ->     mark_id int primary key,
+    ->     ->     student_id int,
+    ->     ->     subject varchar(50),
+    ->     ->     mark int,
+    ->     ->     foreign key (student_id) references students(id));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '->     mark_id int primary key,
+    ->     student_id int,
+    ->     subject va' at line 2
+mysql> create table marks (
+    ->     mark_id int primary key,
+    ->     student_id int,
+    ->     subject varchar(50),
+    ->     mark int,
+    ->     foreign key (student_id) references students(id));
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> insert into student values
+    -> (1, 'anu'),
+    -> (2, 'ravi'),
+    -> (3, 'meena');
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into students values
+    -> (1, 'anu'),
+    -> (2, 'ravi'),
+    -> (3, 'meena');
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> insert into marks values
+    -> (101, 1, 'math', 85),
+    -> (102, 1, 'science', 90),
+    -> (103, 2, 'math', 75),
+    -> (104, 3, 'science', 95);
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select s.name, m.subject, m.mark
+    -> from students s
+    -> join marks m on s.id = m.student_id;
++-------+---------+------+
+| name  | subject | mark |
++-------+---------+------+
+| anu   | math    |   85 |
+| anu   | science |   90 |
+| ravi  | math    |   75 |
+| meena | science |   95 |
++-------+---------+------+
+4 rows in set (0.00 sec)
+
+mysql> alter table students add marks int;
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> update student set marks = 88 where id = 1;
+ERROR 1054 (42S22): Unknown column 'id' in 'where clause'
+mysql> update student set marks = 75 where id = 2;
+ERROR 1054 (42S22): Unknown column 'id' in 'where clause'
+mysql> update student set marks = 95 where id = 3;
+ERROR 1054 (42S22): Unknown column 'id' in 'where clause'
+mysql> update students set marks = 88 where id = 1;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update students set marks = 75 where id = 2;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update students set marks = 95 where id = 3;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from students where marks = (select max(marks) from student);
++----+-------+-------+
+| id | name  | marks |
++----+-------+-------+
+|  1 | anu   |    88 |
+|  2 | ravi  |    75 |
+|  3 | meena |    95 |
++----+-------+-------+
+3 rows in set (0.01 sec)
+
+mysql> create table orders (
+    ->     order_id int primary key,
+    ->     cus_id int,
+    -> amount int,
+    -> foreign key (cus_id) references cus(cus_id));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> insert into orders values
+    -> (101, 1, 2500),
+    -> (102, 2, 1800);
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select c.name, o.amount
+    -> from cus c
+    -> join orders o on c.cus_id = o.cus_id;
++-------+--------+
+| name  | amount |
++-------+--------+
+| sara  |   2500 |
+| saran |   1800 |
++-------+--------+
+2 rows in set (0.00 sec)
+
+mysql> create table category (
+    ->     category_id int primary key,
+    ->     category_name varchar(50)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table product (
+    ->     product_id int primary key,
+    ->     product_name varchar(50),
+    ->     price decimal(10,2),
+    ->     category_id int,
+    ->     foreign key (category_id) references category(category_id)
+    -> );
+ERROR 1050 (42S01): Table 'product' already exists
+mysql> create table products (
+    ->     product_id int primary key,
+    ->     product_name varchar(50),
+    ->     price int,
+    ->     category_id int,
+    ->     foreign key (category_id) references category(category_id));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> insert into category values
+    -> (1, 'electronics'),
+    -> (2, 'stationery');
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> insert into products values
+    -> (1, 'mouse', 250, 1),
+    -> (2, 'keyboard', 450, 1),
+    -> (3, 'pen', 10, 2);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select p.product_name, p.price, c.category_name
+    -> from products p
+    -> join category c on p.category_id = c.category_id
+    -> where c.category_name = 'electronics';
++--------------+-------+---------------+
+| product_name | price | category_name |
++--------------+-------+---------------+
+| mouse        |   250 | electronics   |
+| keyboard     |   450 | electronics   |
++--------------+-------+---------------+
+2 rows in set (0.01 sec)
+
+mysql> show tables;
++---------------------+
+| Tables_in_fsd_tasks |
++---------------------+
+| books               |
+| borrow              |
+| category            |
+| course              |
+| cus                 |
+| department          |
+| emp                 |
+| hr                  |
+| marks               |
+| members             |
+| orders              |
+| product             |
+| products            |
+| sales               |
+| student             |
+| students            |
++---------------------+
+16 rows in set (0.01 sec)
+
+mysql> drop student;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'student' at line 1
+mysql> desc student;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| student_id | int         | NO   | PRI | NULL    |       |
+| name       | varchar(50) | YES  |     | NULL    |       |
+| mark       | int         | YES  |     | NULL    |       |
+| course_id  | int         | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> drop table student;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> drop table department;
+ERROR 3730 (HY000): Cannot drop table 'department' referenced by a foreign key constraint 'emp_ibfk_1' on table 'emp'.
+mysql> create table dept (
+    ->     dept_id int primary key,
+    ->     dept_name varchar(50)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table student (
+    ->     student_id int primary key,
+    ->     name varchar(50),
+    ->     dept_id int,
+    ->     foreign key (dept_id) references dept(dept_id)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> create table result (
+    ->     result_id int primary key,
+    ->     student_id int,
+    ->     subject varchar(50),
+    ->     marks int,
+    ->     foreign key (student_id) references student(student_id)
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> insert into dept values
+    -> (1, 'computer science'),
+    -> (2, 'commerce');
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> insert into result values
+    -> (1, 101, 'java', 85),
+    -> (2, 102, 'accounts', 78);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`fsd_tasks`.`result`, CONSTRAINT `result_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`))
+mysql> 
+mysql> insert into result values
+    -> (1, 101, 'java', 85),
+    -> (2, 102, 'accounts', 78);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`fsd_tasks`.`result`, CONSTRAINT `result_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`))
+mysql> insert into student values
+    -> (101, 'nisha', 1),
+    -> (102, 'arjun', 2);
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> insert into result values
+    -> (1, 101, 'java', 85),
+    -> (2, 102, 'accounts', 78);
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select d.dept_name, s.name, r.subject, r.marks
+    -> from dept d
+    -> join student s on d.dept_id = s.dept_id;
+ERROR 1054 (42S22): Unknown column 'r.subject' in 'field list'
+mysql> select d.dept_name, s.name, r.subject, r.marks
+    -> from dept d
+    -> join student s on d.dept_id = s.dept_id
+    -> join result r;
++------------------+-------+----------+-------+
+| dept_name        | name  | subject  | marks |
++------------------+-------+----------+-------+
+| commerce         | arjun | java     |    85 |
+| computer science | nisha | java     |    85 |
+| commerce         | arjun | accounts |    78 |
+| computer science | nisha | accounts |    78 |
++------------------+-------+----------+-------+
+4 rows in set (0.01 sec)
+
+mysql> select d.dept_name, s.name, r.subject, r.marks
+    -> from dept d
+    -> join student s on d.dept_id = s.dept_id
+    -> join result r on s.student_id = r.student_id;
++------------------+-------+----------+-------+
+| dept_name        | name  | subject  | marks |
++------------------+-------+----------+-------+
+| computer science | nisha | java     |    85 |
+| commerce         | arjun | accounts |    78 |
++------------------+-------+----------+-------+
+2 rows in set (0.01 sec)
+
+mysql> notee;

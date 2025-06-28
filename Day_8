@@ -1,0 +1,92 @@
+mysql> use fsd_tasks;
+Database changed
+mysql> show tables;
++---------------------+
+| Tables_in_fsd_tasks |
++---------------------+
+| books               |
+| borrow              |
+| course              |
+| department          |
+| emp                 |
+| members             |
+| student             |
++---------------------+
+7 rows in set (0.06 sec)
+
+mysql> select *from student;
++------------+--------------+------+-----------+
+| student_id | name         | mark | course_id |
++------------+--------------+------+-----------+
+|          1 | saran        |   89 |         3 |
+|          2 | saranya      |   40 |         4 |
+|          3 | saranya devi |   90 |         4 |
+|          4 | sara         |   60 |         3 |
+|          5 | sarandev     |   30 |         5 |
++------------+--------------+------+-----------+
+5 rows in set (0.01 sec)
+
+mysql> select *from course;
++-----------+-------------+------------+
+| course_id | course_name | course_fee |
++-----------+-------------+------------+
+|         1 | saran       |        500 |
+|         2 | saranya     |       1000 |
+|         3 | java        |        100 |
+|         4 | sql         |        600 |
+|         5 | mysql       |        800 |
++-----------+-------------+------------+
+5 rows in set (0.01 sec)
+
+mysql> UPDATE Course SET course_fee = 1600 WHERE course_id = 3;
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select *from course;
++-----------+-------------+------------+
+| course_id | course_name | course_fee |
++-----------+-------------+------------+
+|         1 | saran       |        500 |
+|         2 | saranya     |       1000 |
+|         3 | java        |       1600 |
+|         4 | sql         |        600 |
+|         5 | mysql       |        800 |
++-----------+-------------+------------+
+5 rows in set (0.00 sec)
+
+mysql> select *from student;
++------------+--------------+------+-----------+
+| student_id | name         | mark | course_id |
++------------+--------------+------+-----------+
+|          1 | saran        |   89 |         3 |
+|          2 | saranya      |   40 |         4 |
+|          3 | saranya devi |   90 |         4 |
+|          4 | sara         |   60 |         3 |
+|          5 | sarandev     |   30 |         5 |
++------------+--------------+------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select *from emp;
++--------+--------------+------------+-----------+--------+---------+
+| emp_id | emp_name     | hire_date  | job       | salary | dept_id |
++--------+--------------+------------+-----------+--------+---------+
+|      1 | sara         | 1999-05-20 | salesman  |  20000 |      20 |
+|      2 | saran        | 1989-07-24 | manager   |  30000 |      23 |
+|      3 | saranya      | 2006-06-14 | developer |  50000 |      20 |
+|      4 | saranya devi | 2005-07-14 | salesman  |  30000 |      20 |
++--------+--------------+------------+-----------+--------+---------+
+4 rows in set (0.01 sec)
+
+mysql> select *from department;
++---------+-----------+----------+
+| dept_id | dept_name | location |
++---------+-----------+----------+
+|      19 | bba       | 5a       |
+|      20 | cs        | 2a       |
+|      23 | bca       | 3a       |
++---------+-----------+----------+
+3 rows in set (0.01 sec)
+
+mysql> notee;
+    -> ^C
+mysql> tee C:\MySQL\Tasks\Day_10
